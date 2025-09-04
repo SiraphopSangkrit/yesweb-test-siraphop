@@ -1,4 +1,4 @@
-import { Head } from '@inertiajs/react';
+import { Head, router } from '@inertiajs/react';
 import { AdminLayout } from '@/layouts/admin-layout';
 import Heading from '@/components/heading';
 import { Card, CardHeader, CardBody } from '@heroui/card';
@@ -47,8 +47,21 @@ export default function ItemManagement({ items, categories }: ItemManagementProp
     const [selectedCategory, setSelectedCategory] = useState<string>('all');
     const [selectedItem, setSelectedItem] = useState<Item | null>(null);
     const { isOpen: isCreateOpen, onOpen: onCreateOpen, onClose: onCreateClose } = useDisclosure();
-    const { isOpen: isEditOpen, onOpen: onEditOpen, onClose: onEditClose } = useDisclosure();
+    const { isOpen: isEditOpen, onOpen: onEditOpen, onClose: onEditCloseOriginal } = useDisclosure();
     const { isOpen: isDeleteOpen, onOpen: onDeleteOpen, onClose: onDeleteClose } = useDisclosure();
+
+    const onEditClose = () => {
+        setSelectedItem(null);
+        setEditData({
+            name: '',
+            description: '',
+            price: '',
+            category_id: '',
+            is_available: true,
+            image: null,
+        });
+        onEditCloseOriginal();
+    };
 
     const { data: createData, setData: setCreateData, post: createPost, processing: createProcessing, errors: createErrors, reset: createReset } = useForm({
         name: '',
@@ -59,7 +72,7 @@ export default function ItemManagement({ items, categories }: ItemManagementProp
         image: null as File | null,
     });
 
-    const { data: editData, setData: setEditData, put: editPut, processing: editProcessing, errors: editErrors } = useForm({
+    const { data: editData, setData: setEditData, processing: editProcessing, errors: editErrors } = useForm({
         name: '',
         description: '',
         price: '',
@@ -113,10 +126,24 @@ export default function ItemManagement({ items, categories }: ItemManagementProp
     const handleEditSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         if (selectedItem) {
-            editPut(`/admin/items/${selectedItem.id}`, {
+            console.log('Submitting edit form with image:', editData.image?.name);
+
+            // Create FormData for file upload
+            const formData = new FormData();
+            formData.append('name', editData.name);
+            formData.append('description', editData.description);
+            formData.append('price', editData.price);
+            formData.append('category_id', editData.category_id);
+            formData.append('is_available', editData.is_available ? '1' : '0');
+            formData.append('_method', 'PUT');
+
+            if (editData.image) {
+                formData.append('image', editData.image);
+            }
+
+            router.post(`/admin/items/${selectedItem.id}`, formData, {
                 onSuccess: () => {
                     onEditClose();
-                    setSelectedItem(null);
                 }
             });
         }
@@ -153,6 +180,8 @@ export default function ItemManagement({ items, categories }: ItemManagementProp
 
     const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>, isEdit = false) => {
         const file = e.target.files?.[0] || null;
+        console.log('Image selected:', file?.name, 'for edit:', isEdit);
+
         if (isEdit) {
             setEditData('image', file);
         } else {
@@ -474,7 +503,18 @@ export default function ItemManagement({ items, categories }: ItemManagementProp
                                         <p className="text-sm text-gray-500 mt-1">Current image</p>
                                     </div>
                                 )}
+                                {editData.image && (
+                                    <div className="mb-2">
+                                        <img
+                                            src={URL.createObjectURL(editData.image)}
+                                            alt="New image preview"
+                                            className="w-24 h-24 rounded-lg object-cover border-2 border-primary"
+                                        />
+                                        <p className="text-sm text-primary mt-1">New image selected: {editData.image.name}</p>
+                                    </div>
+                                )}
                                 <input
+                                    key={selectedItem?.id || 'edit-image'}
                                     type="file"
                                     accept="image/*"
                                     onChange={(e) => handleImageChange(e, true)}

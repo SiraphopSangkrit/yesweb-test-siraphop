@@ -9,6 +9,7 @@ use App\Models\Order;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 use Inertia\Response;
 use Spatie\Permission\Models\Role;
@@ -215,6 +216,7 @@ class AdminController extends Controller
      */
     public function updateItem(Request $request, Item $item)
     {
+
         $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'required|string',
