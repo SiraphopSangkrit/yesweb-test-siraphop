@@ -3,6 +3,7 @@ import { Button } from '@heroui/button';
 import { Card, CardBody } from '@heroui/card';
 import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, useDisclosure } from '@heroui/modal';
 import { Input } from '@heroui/input';
+import { Badge } from '@heroui/badge';
 import { Chip } from '@heroui/chip';
 import { ShoppingCart, Plus, Minus, Trash2 } from 'lucide-react';
 import { useCart } from '@/contexts/CartContext';
@@ -189,23 +190,21 @@ export function CartIcon() {
 
     return (
         <>
-            <Button
-                isIconOnly
-                variant="flat"
-                onPress={onOpen}
-                className="relative"
+            <Badge
+                content={cart.item_count > 99 ? '99+' : cart.item_count}
+                color="danger"
+                isInvisible={cart.item_count === 0}
+                shape="circle"
             >
-                <ShoppingCart className="h-5 w-5" />
-                {cart.item_count > 0 && (
-                    <Chip
-                        color="danger"
-                        size="sm"
-                        className="absolute -top-2 -right-2 min-w-5 h-5 text-xs overflow-auto"
-                    >
-                        {cart.item_count > 99 ? '99+' : cart.item_count}
-                    </Chip>
-                )}
-            </Button>
+                <Button
+                    isIconOnly
+                    variant="flat"
+                    onPress={onOpen}
+                    className="relative"
+                >
+                    <ShoppingCart className="h-5 w-5" />
+                </Button>
+            </Badge>
             <CartModal isOpen={isOpen} onClose={onClose} />
         </>
     );

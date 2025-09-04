@@ -1,10 +1,10 @@
-import { dashboard, login,logout} from '@/routes';
+import { CartIcon } from '@/components/Cart';
+import FoodItemsGrid from '@/components/food-items-grid';
+import { Cart, CartProvider, useCart } from '@/contexts/CartContext';
+import { isAdmin } from '@/lib/auth';
+import { dashboard, login, logout } from '@/routes';
 import { type SharedData, FoodItem } from '@/types';
 import { Head, Link, usePage } from '@inertiajs/react';
-import { isAdmin } from '@/lib/auth';
-import FoodItemsGrid from '@/components/food-items-grid';
-import { CartProvider, Cart, useCart } from '@/contexts/CartContext';
-import { CartIcon } from '@/components/Cart';
 
 interface WelcomeProps extends SharedData {
     items: FoodItem[];
@@ -44,28 +44,28 @@ function WelcomeContent({ auth, items }: { auth: SharedData['auth']; items: Food
                     <nav className="flex items-center justify-end gap-4">
                         {auth.user ? (
                             <>
-                            {isAdmin(auth.user) && (
-                                <Link
-                                    href={dashboard()}
-                                    className="inline-block rounded-sm border border-[#19140035] px-5 py-1.5 text-sm leading-normal text-[#1b1b18] hover:border-[#1915014a] dark:border-[#3E3E3A] dark:text-[#EDEDEC] dark:hover:border-[#62605b]"
+                                {isAdmin(auth.user) && (
+                                    <Link
+                                        href={dashboard()}
+                                        className="inline-block rounded-sm border border-[#19140035] px-5 py-1.5 text-sm leading-normal text-[#1b1b18] hover:border-[#1915014a] dark:border-[#3E3E3A] dark:text-[#EDEDEC] dark:hover:border-[#62605b]"
                                     >
-                                    Dashboard
+                                        Dashboard
+                                    </Link>
+                                )}
+                                <Link
+                                    href="/orders"
+                                    className="inline-block rounded-sm border border-[#19140035] px-5 py-1.5 text-sm leading-normal text-[#1b1b18] hover:border-[#1915014a] dark:border-[#3E3E3A] dark:text-[#EDEDEC] dark:hover:border-[#62605b]"
+                                >
+                                    My Orders
                                 </Link>
-                            )}
-                            <Link
-                                href="/orders"
-                                className="inline-block rounded-sm border border-[#19140035] px-5 py-1.5 text-sm leading-normal text-[#1b1b18] hover:border-[#1915014a] dark:border-[#3E3E3A] dark:text-[#EDEDEC] dark:hover:border-[#62605b]"
-                            >
-                                My Orders
-                            </Link>
 
- <Link
-                                href={logout()}
-                                className="inline-block rounded-sm border border-[#19140035] px-5 py-1.5 text-sm leading-normal text-[#1b1b18] hover:border-[#1915014a] dark:border-[#3E3E3A] dark:text-[#EDEDEC] dark:hover:border-[#62605b]"
-                            >
-                               Logout
-                            </Link>
-                                </>
+                                <Link
+                                    href={logout()}
+                                    className="inline-block rounded-sm border border-[#19140035] px-5 py-1.5 text-sm leading-normal text-[#1b1b18] hover:border-[#1915014a] dark:border-[#3E3E3A] dark:text-[#EDEDEC] dark:hover:border-[#62605b]"
+                                >
+                                    Logout
+                                </Link>
+                            </>
                         ) : (
                             <>
                                 <Link
@@ -75,32 +75,24 @@ function WelcomeContent({ auth, items }: { auth: SharedData['auth']; items: Food
                                     Log in
                                 </Link>
                                 <Link
-                                href="/orders"
-                                className="inline-block rounded-sm border border-[#19140035] px-5 py-1.5 text-sm leading-normal text-[#1b1b18] hover:border-[#1915014a] dark:border-[#3E3E3A] dark:text-[#EDEDEC] dark:hover:border-[#62605b]"
-                            >
-                                My Orders
-                            </Link>
-
+                                    href="/orders"
+                                    className="inline-block rounded-sm border border-[#19140035] px-5 py-1.5 text-sm leading-normal text-[#1b1b18] hover:border-[#1915014a] dark:border-[#3E3E3A] dark:text-[#EDEDEC] dark:hover:border-[#62605b]"
+                                >
+                                    My Orders
+                                </Link>
                             </>
                         )}
                         <CartIcon />
                     </nav>
                 </header>
                 <div className="flex w-full items-center justify-center opacity-100 transition-opacity duration-750 lg:grow starting:opacity-0">
-                    <main className="flex flex-col w-full max-w-7xl mx-auto space-y-8">
-
+                    <main className="mx-auto flex w-full max-w-7xl flex-col space-y-8">
                         <div className="space-y-6">
                             <div className="text-center">
-                                <h2 className="text-2xl font-bold text-gray-800 mb-2">Featured Food Items</h2>
-                                <p className="text-gray-600">Delicious Thai cuisine ready to be ordered</p>
+                                <h2 className="mb-2 text-2xl font-bold text-gray-800">Food Order</h2>
                             </div>
 
-                            <FoodItemsGrid
-                                items={items}
-                                onAddToCart={handleAddToCart}
-                                onViewDetails={handleViewDetails}
-
-                            />
+                            <FoodItemsGrid items={items} onAddToCart={handleAddToCart} onViewDetails={handleViewDetails} />
                         </div>
                     </main>
                 </div>

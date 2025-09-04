@@ -11,13 +11,7 @@
     --font-sans:
         'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
 
-    /* HeroUI Integration */
-    --heroui-radius-small: 6px;
-    --heroui-radius-medium: 8px;
-    --heroui-radius-large: 12px;
-    --heroui-border-width: 1px;
-    --heroui-divider-weight: 1px;
-    --heroui-disabled-opacity: 0.5;
+
 
     /* Tailwind v4 radius tokens for HeroUI compatibility */
     --radius-lg: var(--radius);
@@ -161,13 +155,4 @@ body {
 }
 
 /* HeroUI theme integration */
-.heroui-provider {
-    --heroui-font-size-tiny: 0.75rem;
-    --heroui-font-size-small: 0.875rem;
-    --heroui-font-size-medium: 1rem;
-    --heroui-font-size-large: 1.125rem;
-    --heroui-line-height-tiny: 1rem;
-    --heroui-line-height-small: 1.25rem;
-    --heroui-line-height-medium: 1.5rem;
-    --heroui-line-height-large: 1.75rem;
-}
+
