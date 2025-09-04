@@ -39,7 +39,7 @@ A modern food ordering application built with Laravel 12, React 18, TypeScript, 
 
 1. **Clone the repository**
    ```bash
-   git clone <repository-url>
+   git clone https://github.com/SiraphopSangkrit/yesweb-test-siraphop.git
    cd yesweb-test-siraphop
    ```
 
